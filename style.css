@@ -1,3 +1,9 @@
-h1 {
-    color: red;
-}
+@media (min-width: 768px) {
+    .navbar-brand.abs
+        {
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+    
