@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
-const APIKEY = "4d1c35ab02fb69cc9be0d032ef6ba186";
+    // APIKEY for openweather.org
+    const APIKEY = "4d1c35ab02fb69cc9be0d032ef6ba186";
 
 
     // Event listener for search
@@ -43,6 +44,7 @@ const APIKEY = "4d1c35ab02fb69cc9be0d032ef6ba186";
 
     // Dynamically updates HTML to render weather data
     function renderWeatherDisplay(response, responseUV) {
+        $("#weather-info-display").empty();
         $(".hide").show();
         $("#weather-info-display").append($("<h2>").text(`${response.name}`));
         $("h2").append($("<img>").attr("src", `http://openweathermap.org/img/w/${response.weather[0].icon}.png`));
@@ -61,20 +63,24 @@ const APIKEY = "4d1c35ab02fb69cc9be0d032ef6ba186";
         }
     }
 
+
+    // Renders 5-day forecast on page
     function renderFiveDayForecast(response) {
-        
-        console.log(response);
-        var d = new Date();
-        
-        $("#five-day-display").prepend($("<h3>").text("5-Day Forecast:"));
+        // First, empty the five-day-display div of any existing elements (used for when a user inputs another city so that elements don't become stacked)
+        $("#five-day-display").empty();
+        // Dynamically create header and bootstrap 'card-deck' div for the loop to append elements to
+        $("#five-day-display").append($("<h3>").text("5-Day Forecast:"), $("<div class='card-deck'>"));
 
         for(var i = 1; i <= 5; i++){
-            $(".card-deck").append($("<div class='card text-white bg-primary card-body'>").append($("<h5>").text(`${d.getMonth()}/${d.getDate()+i}/${d.getFullYear()}`)));
-            
+            // Create Date object with the UNIX timestamp so that we can grab those values and convert to readable format (MM/DD/YYYY)
+            var d = new Date(response.daily[i].dt*1000); 
+            $(".card-deck").append($("<div class='card text-white bg-primary card-body'>").append($("<h5>").text(`${d.getMonth()}/${d.getDate()}/${d.getFullYear()}`), 
+            $("<p>").append($("<img>").attr("src", `http://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png`)),
+            $("<p>").text(`Temp: ${response.daily[i].temp.day} °F`),
+            $("<p>").text(`Humidity: ${response.daily[i].humidity}%`)));
         }
 
     }
-
 
 
 
