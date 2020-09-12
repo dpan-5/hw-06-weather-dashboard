@@ -22,14 +22,11 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-3" id="sidebar">
-                    <!-- <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search for a City" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
-
+                    <form class="form-inline my-2 my-lg-0">
                         <div class="input-group mb-4 border rounded-pill p-1">
-                            <input type="search" placeholder="Search City" aria-describedby="button-addon3" class="form-control bg-none border-0">
+                            <input id="searchInput" type="search" placeholder="Search City" aria-describedby="button-addon3" class="form-control bg-none border-0">
                             <div class="input-group-append border-0">
-                              <button id="button-addon3" type="button" class="btn btn-link text-success"><i class="fa fa-search"></i></button>
+                              <button id="citySearchBtn" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
                             </div>
                           </div>
                       </form>
@@ -41,24 +38,21 @@
                         </ul>
                       </div> -->
 
-                      <!-- <div class="list-group">
-                        <a href="#" class="list-group-item list-group-item-action active">
-                          Cras justo odio
-                        </a>
+                      <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action">Cras justo odio</a>
                         <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
                         <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
                         <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
                         <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">Vestibulum at eros</a>
-                      </div> -->
+                      </div>
                 </div>
                 <div class="col-sm-9">
                     <div class="row">
-                        <div class="col-sm-12">
-                            WEATHER INFORMATION GOES HERE
+                        <div class="col-sm-11 hide" id="weather-info-display">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-11">
                             5 DAY FORECAST GOES HERE
                         </div>
                     </div>
@@ -66,7 +60,7 @@
             </div>
         </div>
         
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="script.js"></script>
     </body>
 </html>

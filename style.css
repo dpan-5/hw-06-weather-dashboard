@@ -8,5 +8,17 @@
 
 /* Styling for sidebar div */
 #sidebar {
-    padding-top: 30px;
+    margin-top: 30px;
 }
+
+#weather-info-display {
+    margin-top: 15px;
+    padding-top: 15px;
+    border: thin solid rgb(215, 215, 215);
+    border-radius: 5px;
+}
+
+.hide {
+    display: none;
+}
+
