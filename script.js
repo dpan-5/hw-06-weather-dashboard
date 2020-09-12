@@ -3,9 +3,15 @@ $(document).ready(function() {
     // APIKEY for openweather.org
     const APIKEY = "4d1c35ab02fb69cc9be0d032ef6ba186";
 
+    // Array of cities from localStorage that the user has searched for - used to populate sidebar
+    var citySearches = [];
 
-    // Event listener for search
-    $("#citySearchBtn").on("click", getWeather);
+    // Event listener for Search bar
+    $("#citySearchBtn").on("click", function() {
+        getWeather();
+        saveToLocalStorage();
+        renderCitySidebar();
+    });
 
     // Makes API call to openweathermap.org and returns data
     function getWeather() {
@@ -14,7 +20,7 @@ $(document).ready(function() {
         var lat = "";
         var lon = "";
 
-        // Get weather data
+        // Grab weather data, then make two additional API calls to get UV index and 5-day forecast
         $.ajax({
             url: `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}&units=imperial`,
             method: "GET"
@@ -22,8 +28,7 @@ $(document).ready(function() {
             lat = response.coord.lat;
             lon = response.coord.lon;
             
-
-            // Get UV index data using latitude and longitude from previous API call
+            // Get UV index data using latitude and longitude from previous API call, then call renderWeatherDisplay function
             $.ajax({
                 url: `http://api.openweathermap.org/data/2.5/uvi/forecast?appid=${APIKEY}&lat=${lat}&lon=${lon}&cnt=1`,
                 method: "GET"
@@ -31,18 +36,16 @@ $(document).ready(function() {
                 renderWeatherDisplay(response, responseUV);
             });
 
-            // Get 5 day forecast
+            // Get 5 day forecast by using latitude and longitude from first API call, then call renderFiveDayForecast function
             $.ajax({
                 url: `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${APIKEY}&units=imperial&exclude=current,minutely,hourly`,
                 method: "GET"
-            }).then(renderFiveDayForecast)
-
-
+            }).then(renderFiveDayForecast);
 
         });
     }
 
-    // Dynamically updates HTML to render weather data
+    // Renders current weather data for city on page by dynamically updating HTML
     function renderWeatherDisplay(response, responseUV) {
         $("#weather-info-display").empty();
         $(".hide").show();
@@ -63,8 +66,7 @@ $(document).ready(function() {
         }
     }
 
-
-    // Renders 5-day forecast on page
+    // Renders 5-day forecast on page by dynamically updating HTML
     function renderFiveDayForecast(response) {
         // First, empty the five-day-display div of any existing elements (used for when a user inputs another city so that elements don't become stacked)
         $("#five-day-display").empty();
@@ -79,10 +81,30 @@ $(document).ready(function() {
             $("<p>").text(`Temp: ${response.daily[i].temp.day} °F`),
             $("<p>").text(`Humidity: ${response.daily[i].humidity}%`)));
         }
+    }
 
+    function saveToLocalStorage() {
+        // Push search term to citySearches array **** PROBABLY NEED TO ADD 400 ERROR FOR EDGE CASE
+        citySearches.push($("#searchInput").val());
+
+        // Sets localStorage to past searches using citySearches array
+        localStorage.setItem("citySearches", JSON.stringify(citySearches));
+    }
+
+    function renderCitySidebar() {
+        // Empty the list-group div to prevent duplication of city searches in the display
+        $(".list-group").empty();
+        var storedCitySearches = JSON.parse(localStorage.getItem("citySearches"));
+        if(storedCitySearches !== null) {
+            citySearches = storedCitySearches;
+        }
+
+        citySearches.forEach(element => {
+            $(".list-group").append($("<a href='#' class='list-group-item list-group-item-action'>").text(element));
+        });
     }
 
 
-
+    renderCitySidebar();
 
 });
