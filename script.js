@@ -35,22 +35,26 @@ const APIKEY = "4d1c35ab02fb69cc9be0d032ef6ba186";
     // Dynamically updates HTML to render weather data
     function renderWeatherDisplay(response, responseUV) {
         $(".hide").show();
-        $("#weather-info-display").append($("<h2>").text(response.name));
+        $("#weather-info-display").append($("<h2>").text(`${response.name}`));
+        $("h2").append($("<img>").attr("src", `http://openweathermap.org/img/w/${response.weather[0].icon}.png`));
         $("#weather-info-display").append($("<p>").text(`Temperature: ${response.main.temp} °F`));
         $("#weather-info-display").append($("<p>").text(`Humidity: ${response.main.humidity}%`));
         $("#weather-info-display").append($("<p>").text(`Wind Speed: ${response.wind.speed} MPH`));
-        $("#weather-info-display").append($("<p>").text(`U/V Index: ${responseUV[0].value}`));
 
+        if(responseUV[0].value < 4) {
+            $("#weather-info-display").append($("<p>").text("UV Index: ").append($("<span class='badge badge-pill badge-success'>").text(responseUV[0].value)));
+        }
+        else if(responseUV[0].value >= 4 && responseUV[0].value <= 7) {
+            $("#weather-info-display").append($("<p>").text("UV Index: ").append($("<span class='badge badge-pill badge-warning'>").text(responseUV[0].value)));
+        }
+        else {
+            $("#weather-info-display").append($("<p>").text("UV Index: ").append($("<span class='badge badge-pill badge-danger'>").text(responseUV[0].value)));
+        }
 
+        // $("#weather-info-display").append($("<p>").text(`U/V Index: ${responseUV[0].value}`));
 
         console.log(response);
     }
-
-
-    // $.ajax({
-    //     url: "https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={YOUR API KEY}"
-
-    // }).then(console.log(response))
 
 
 
