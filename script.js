@@ -15,7 +15,7 @@ const APIKEY = "4d1c35ab02fb69cc9be0d032ef6ba186";
 
         // Get weather data
         $.ajax({
-            url: `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}&units=imperial`,
+            url: `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}&units=imperial`,
             method: "GET"
         }).then(function(response) {
             lat = response.coord.lat;
@@ -29,6 +29,15 @@ const APIKEY = "4d1c35ab02fb69cc9be0d032ef6ba186";
             }).then(function(responseUV) {
                 renderWeatherDisplay(response, responseUV);
             });
+
+            // Get 5 day forecast
+            $.ajax({
+                url: `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${APIKEY}&units=imperial&exclude=current,minutely,hourly`,
+                method: "GET"
+            }).then(renderFiveDayForecast)
+
+
+
         });
     }
 
@@ -50,15 +59,21 @@ const APIKEY = "4d1c35ab02fb69cc9be0d032ef6ba186";
         else {
             $("#weather-info-display").append($("<p>").text("UV Index: ").append($("<span class='badge badge-pill badge-danger'>").text(responseUV[0].value)));
         }
-
-        // $("#weather-info-display").append($("<p>").text(`U/V Index: ${responseUV[0].value}`));
-
-        console.log(response);
     }
 
+    function renderFiveDayForecast(response) {
+        
+        console.log(response);
+        var d = new Date();
+        
+        $("#five-day-display").prepend($("<h3>").text("5-Day Forecast:"));
 
+        for(var i = 1; i <= 5; i++){
+            $(".card-deck").append($("<div class='card text-white bg-primary card-body'>").append($("<h5>").text(`${d.getMonth()}/${d.getDate()+i}/${d.getFullYear()}`)));
+            
+        }
 
-
+    }
 
 
 
