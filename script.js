@@ -25,7 +25,7 @@ $(document).ready(function() {
 
         // Grab weather data, then make two additional API calls to get UV index and 5-day forecast
         $.ajax({
-            url: `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}&units=imperial`,
+            url: `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}&units=imperial`,
             method: "GET"
         }).then(function(response) {
             lat = response.coord.lat;
@@ -33,7 +33,7 @@ $(document).ready(function() {
             
             // Get UV index data using latitude and longitude from previous API call, then call renderWeatherDisplay function
             $.ajax({
-                url: `http://api.openweathermap.org/data/2.5/uvi/forecast?appid=${APIKEY}&lat=${lat}&lon=${lon}&cnt=1`,
+                url: `https://api.openweathermap.org/data/2.5/uvi/forecast?appid=${APIKEY}&lat=${lat}&lon=${lon}&cnt=1`,
                 method: "GET"
             }).then(function(responseUV) {
                 renderWeatherDisplay(response, responseUV);
@@ -53,7 +53,7 @@ $(document).ready(function() {
         $("#weather-info-display").empty(); // empty the weather-info-display div, so that elements do not get duplicated if this function is called multiple times
         $(".hide").show(); // shows the hidden weather display, due to styling - borders are shown even if empty so we have to hide it initially
         $("#weather-info-display").append($("<h2>").text(`${response.name}`));
-        $("h2").append($("<img>").attr("src", `http://openweathermap.org/img/w/${response.weather[0].icon}.png`));
+        $("h2").append($("<img>").attr("src", `https://openweathermap.org/img/w/${response.weather[0].icon}.png`));
         $("#weather-info-display").append($("<p>").text(`Temperature: ${response.main.temp} °F`));
         $("#weather-info-display").append($("<p>").text(`Humidity: ${response.main.humidity}%`));
         $("#weather-info-display").append($("<p>").text(`Wind Speed: ${response.wind.speed} MPH`));
@@ -80,7 +80,7 @@ $(document).ready(function() {
             // Create Date object with the UNIX timestamp so that we can grab those values and convert to readable format (MM/DD/YYYY)
             var d = new Date(response.daily[i].dt*1000); 
             $(".card-deck").append($("<div class='card text-white bg-primary card-body'>").append($("<h5>").text(`${d.getMonth()}/${d.getDate()}/${d.getFullYear()}`), 
-            $("<p>").append($("<img>").attr("src", `http://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png`)),
+            $("<p>").append($("<img>").attr("src", `https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png`)),
             $("<p>").text(`Temp: ${response.daily[i].temp.day} °F`),
             $("<p>").text(`Humidity: ${response.daily[i].humidity}%`)));
         }
