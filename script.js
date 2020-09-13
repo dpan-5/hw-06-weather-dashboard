@@ -8,15 +8,14 @@ $(document).ready(function() {
 
     // Event listener for Search bar
     $("#citySearchBtn").on("click", function() {
-        getWeather();
+        var city = $("#searchInput").val(); // returns val of user search input (i.e. City)
+        getWeather(city);
         saveToLocalStorage();
         renderCitySidebar();
     });
 
     // Makes API call to openweathermap.org and returns data
-    function getWeather() {
-        var city = $("#searchInput").val(); // returns val of user search input (i.e. City)
-
+    function getWeather(city) {
         var lat = "";
         var lon = "";
 
@@ -100,10 +99,14 @@ $(document).ready(function() {
         }
 
         citySearches.forEach(element => {
-            $(".list-group").append($("<a href='#' class='list-group-item list-group-item-action'>").text(element));
+            $(".list-group").append($("<button type='button' class='list-group-item list-group-item-action'>").text(element));
         });
     }
 
+    // Event listener for past searched cities
+    $(".list-group").on("click", ".list-group-item", function(event) {
+        getWeather($(this).text());
+    });
 
     renderCitySidebar();
 
