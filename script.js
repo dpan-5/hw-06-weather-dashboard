@@ -6,9 +6,13 @@ $(document).ready(function() {
     // Array of cities from localStorage that the user has searched for - used to populate sidebar
     var citySearches = [];
 
+    // Initializing variable to keep track of last searched city
+    var lastSearchedCity = "";
+
     // Event listener for Search bar
     $("#citySearchBtn").on("click", function() {
         var city = $("#searchInput").val(); // returns val of user search input (i.e. City)
+        lastSearchedCity = city;
         getWeather(city);
         saveToLocalStorage();
         renderCitySidebar();
@@ -46,8 +50,8 @@ $(document).ready(function() {
 
     // Renders current weather data for city on page by dynamically updating HTML
     function renderWeatherDisplay(response, responseUV) {
-        $("#weather-info-display").empty();
-        $(".hide").show();
+        $("#weather-info-display").empty(); // empty the weather-info-display div, so that elements do not get duplicated if this function is called multiple times
+        $(".hide").show(); // shows the hidden weather display, due to styling - borders are shown even if empty so we have to hide it initially
         $("#weather-info-display").append($("<h2>").text(`${response.name}`));
         $("h2").append($("<img>").attr("src", `http://openweathermap.org/img/w/${response.weather[0].icon}.png`));
         $("#weather-info-display").append($("<p>").text(`Temperature: ${response.main.temp} °F`));
@@ -92,6 +96,9 @@ $(document).ready(function() {
             localStorage.setItem("citySearches", JSON.stringify(citySearches));
         }
 
+        // Sets localStorage to last searched city
+        localStorage.setItem("lastSearchedCity", lastSearchedCity);
+
     }
 
     // Renders past searched cities in the sidebar
@@ -103,6 +110,7 @@ $(document).ready(function() {
             citySearches = storedCitySearches;
         }
 
+        // Dynamically create HTML elements for each city in the citySearches array
         citySearches.forEach(element => {
             $(".list-group").append($("<button type='button' class='list-group-item list-group-item-action'>").text(element));
         });
@@ -114,4 +122,8 @@ $(document).ready(function() {
     });
 
     renderCitySidebar();
+
+    if(localStorage.getItem("lastSearchedCity") !== null) {
+        getWeather(localStorage.getItem("lastSearchedCity"));
+    }
 });
