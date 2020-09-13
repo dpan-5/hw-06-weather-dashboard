@@ -82,14 +82,19 @@ $(document).ready(function() {
         }
     }
 
+    // Saves past searched cities to localStorage
     function saveToLocalStorage() {
-        // Push search term to citySearches array **** PROBABLY NEED TO ADD 400 ERROR FOR EDGE CASE
-        citySearches.push($("#searchInput").val());
+        // Validation check to see if searched city exists on the sidebar - if true, city is not pushed to citySearches array
+        if(citySearches.includes($("#searchInput").val()) === false) {
+            // Push search term to citySearches array **** PROBABLY NEED TO ADD 400 ERROR FOR EDGE CASE
+            citySearches.push($("#searchInput").val());
+            // Sets localStorage to past searches using citySearches array
+            localStorage.setItem("citySearches", JSON.stringify(citySearches));
+        }
 
-        // Sets localStorage to past searches using citySearches array
-        localStorage.setItem("citySearches", JSON.stringify(citySearches));
     }
 
+    // Renders past searched cities in the sidebar
     function renderCitySidebar() {
         // Empty the list-group div to prevent duplication of city searches in the display
         $(".list-group").empty();
@@ -103,11 +108,10 @@ $(document).ready(function() {
         });
     }
 
-    // Event listener for past searched cities
+    // Event listener for past searched cities, using event delegation to handle the event
     $(".list-group").on("click", ".list-group-item", function(event) {
         getWeather($(this).text());
     });
 
     renderCitySidebar();
-
 });
