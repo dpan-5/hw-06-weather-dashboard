@@ -12,13 +12,8 @@ $(document).ready(function() {
     // Event listener for Search bar
     $("#citySearchBtn").on("click", function() {
         var city = $("#searchInput").val(); // returns val of user search input (i.e. City)
-        lastSearchedCity = city;
         getWeather(city);
-        if(city.trim() != "") { // check if user input is empty / whitespace
-            saveToLocalStorage();
-        }
-        renderCitySidebar();
-
+        lastSearchedCity = city;
     });
 
     // Makes API call to openweathermap.org and returns data
@@ -33,6 +28,8 @@ $(document).ready(function() {
         }).then(function(response) {
             lat = response.coord.lat;
             lon = response.coord.lon;
+            saveToLocalStorage();
+            renderCitySidebar();
             
             // Get UV index data using latitude and longitude from previous API call, then call renderWeatherDisplay function
             $.ajax({
@@ -90,17 +87,16 @@ $(document).ready(function() {
 
     // Saves past searched cities to localStorage
     function saveToLocalStorage() {
-        // Validation check to see if searched city exists on the sidebar - if true, city is not pushed to citySearches array
-        if(citySearches.includes($("#searchInput").val()) === false) {
-            // Push search term to citySearches array **** PROBABLY NEED TO ADD 400 ERROR FOR EDGE CASE
+        // Validation check to see if searched city exists on the sidebar AND whether or not searched city is an empty string
+        if(citySearches.includes($("#searchInput").val()) === false && $("#searchInput").val().trim() != "") {
+            // Push search term to citySearches array **** PROBABLY NEED TO ACCOUNT FOR EDGE CASE
             citySearches.push($("#searchInput").val());
             // Sets localStorage to past searches using citySearches array
             localStorage.setItem("citySearches", JSON.stringify(citySearches));
-        }
 
         // Sets localStorage to last searched city
         localStorage.setItem("lastSearchedCity", lastSearchedCity);
-
+        }
     }
 
     // Renders past searched cities in the sidebar
