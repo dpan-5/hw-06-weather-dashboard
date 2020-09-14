@@ -14,8 +14,11 @@ $(document).ready(function() {
         var city = $("#searchInput").val(); // returns val of user search input (i.e. City)
         lastSearchedCity = city;
         getWeather(city);
-        saveToLocalStorage();
+        if(city.trim() != "") { // check if user input is empty / whitespace
+            saveToLocalStorage();
+        }
         renderCitySidebar();
+
     });
 
     // Makes API call to openweathermap.org and returns data
@@ -44,7 +47,6 @@ $(document).ready(function() {
                 url: `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${APIKEY}&units=imperial&exclude=current,minutely,hourly`,
                 method: "GET"
             }).then(renderFiveDayForecast);
-
         });
     }
 
@@ -123,6 +125,7 @@ $(document).ready(function() {
 
     renderCitySidebar();
 
+    // Check localStorage for lastSearchedCity to display on screen
     if(localStorage.getItem("lastSearchedCity") !== null) {
         getWeather(localStorage.getItem("lastSearchedCity"));
     }
