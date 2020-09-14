@@ -10,7 +10,8 @@ $(document).ready(function() {
     var lastSearchedCity = "";
 
     // Event listener for Search bar
-    $("#citySearchBtn").on("click", function() {
+    $("#citySearchBtn").on("click", function(event) {
+        event.preventDefault();
         var city = $("#searchInput").val(); // returns val of user search input (i.e. City)
         getWeather(city);
         lastSearchedCity = city;
@@ -89,7 +90,7 @@ $(document).ready(function() {
     function saveToLocalStorage() {
         // Validation check to see if searched city exists on the sidebar AND whether or not searched city is an empty string
         if(citySearches.includes($("#searchInput").val()) === false && $("#searchInput").val().trim() != "") {
-            // Push search term to citySearches array **** PROBABLY NEED TO ACCOUNT FOR EDGE CASE
+            // Push search term to citySearches array
             citySearches.push($("#searchInput").val());
             // Sets localStorage to past searches using citySearches array
             localStorage.setItem("citySearches", JSON.stringify(citySearches));
